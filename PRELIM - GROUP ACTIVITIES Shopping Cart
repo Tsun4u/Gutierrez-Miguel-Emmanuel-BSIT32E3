@@ -1,0 +1,118 @@
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public string ImageUrl { get; set; }
+}
+
+public class CartItem
+{
+    public int ProductId { get; set; }
+    public string ProductName { get; set; }
+    public decimal Price { get; set; }
+    public int Quantity { get; set; }
+}
+
+using System.Collections.Generic;
+
+public class Cart
+{
+    public List<CartItem> Items { get; set; } = new List<CartItem>();
+}
+
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+
+public class ProductController : Controller
+{
+    public IActionResult Index()
+    {
+        var products = new List<Product>
+        {
+            new Product { Id = 1, Name = "Product 1", Price = 10.50m, ImageUrl = "product1.jpg" },
+            new Product { Id = 2, Name = "Product 2", Price = 15.75m, ImageUrl = "product2.jpg" },
+            new Product { Id = 3, Name = "Product 3", Price = 20.00m, ImageUrl = "product3.jpg" }
+        };
+        return View(products);
+    }
+}
+
+using Microsoft.AspNetCore.Mvc;
+
+public class CartController : Controller
+{
+    private readonly Cart _cart;
+
+    public CartController(Cart cart)
+    {
+        _cart = cart;
+    }
+
+    public IActionResult Index()
+    {
+        return View(_cart);
+    }
+
+    public IActionResult AddToCart(int productId)
+    {
+        // Add product to cart logic
+        return RedirectToAction("Index");
+    }
+
+    public IActionResult RemoveFromCart(int productId)
+    {
+        // Remove product from cart logic
+        return RedirectToAction("Index");
+    }
+}
+@model List<Product>
+
+<h2>Products</h2>
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-4 shadow-sm">
+                <img class="card-img-top" src="@product.ImageUrl" alt="@product.Name">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Name</h5>
+                    <p class="card-text">$@product.Price</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="btn-group">
+                            <a asp-controller="Cart" asp-action="AddToCart" asp-route-productId="@product.Id" class="btn btn-sm btn-outline-secondary">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@model Cart
+
+<h2>Shopping Cart</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>@item.ProductName</td>
+                <td>$@item.Price</td>
+                <td>@item.Quantity</td>
+                <td>$@(item.Price * item.Quantity)</td>
+                <td>
+                    <a asp-controller="Cart" asp-action="RemoveFromCart" asp-route-productId="@item.ProductId">Remove</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
