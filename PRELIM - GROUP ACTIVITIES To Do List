@@ -1,0 +1,80 @@
+using System.ComponentModel.DataAnnotations;
+
+public class TodoItem
+{
+    public int Id { get; set; }
+
+    [Required]
+    public string TaskDescription { get; set; }
+
+    public bool IsCompleted { get; set; }
+}
+
+
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Mvc;
+
+public class TodoController : Controller
+{
+    private static List<TodoItem> todoList = new List<TodoItem>();
+
+    public IActionResult Index()
+    {
+        return View(todoList);
+    }
+
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Create(TodoItem item)
+    {
+        if (ModelState.IsValid)
+        {
+            item.Id = todoList.Count + 1;
+            todoList.Add(item);
+            return RedirectToAction("Index");
+        }
+        return View(item);
+    }
+
+    public IActionResult MarkAsCompleted(int id)
+    {
+        var item = todoList.FirstOrDefault(i => i.Id == id);
+        if (item != null)
+        {
+            item.IsCompleted = true;
+        }
+        return RedirectToAction("Index");
+    }
+}
+
+
+@model List<TodoItem>
+
+<h2>To-Do List</h2>
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>
+            <input type="checkbox" onchange="location.href='@Url.Action("MarkAsCompleted", "Todo", new { id = item.Id })'" @(item.IsCompleted ? "checked" : "") />
+            @item.TaskDescription
+        </li>
+    }
+</ul>
+
+
+@model TodoItem
+
+<h2>Add New To-Do Item</h2>
+<form asp-action="Create">
+    <div class="form-group">
+        <label asp-for="TaskDescription"></label>
+        <input asp-for="TaskDescription" class="form-control" />
+        <span asp-validation-for="TaskDescription" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
