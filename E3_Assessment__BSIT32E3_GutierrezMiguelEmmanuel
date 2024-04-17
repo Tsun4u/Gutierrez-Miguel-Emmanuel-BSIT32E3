@@ -1,0 +1,182 @@
+// Write a C# program that calculates the area of a triangle given its base and height. Include user input for both values and display the calculated area.
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Prompt the user to enter the base of the triangle
+        Console.Write("Enter the base of the triangle: ");
+        double baseLength = Convert.ToDouble(Console.ReadLine());
+
+        // Prompt the user to enter the height of the triangle
+        Console.Write("Enter the height of the triangle: ");
+        double height = Convert.ToDouble(Console.ReadLine());
+
+        // Calculate the area of the triangle
+        double area = 0.5 * baseLength * height;
+
+        // Display the calculated area
+        Console.WriteLine($"The area of the triangle with base {baseLength} and height {height} is: {area}");
+    }
+}
+
+//Declare an array of 5 integers and fill it with values based on a user-defined formula (e.g., n^2). Then, print the largest element in the array.
+
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Declare an array of 5 integers
+        int[] numbers = new int[5];
+
+        // Prompt the user to define the formula for filling the array
+        Console.Write("Enter the formula (e.g., n^2) to fill the array: ");
+        string formula = Console.ReadLine();
+
+        // Fill the array with values based on the user-defined formula
+        for (int i = 0; i < numbers.Length; i++)
+        {
+            numbers[i] = CalculateValue(i + 1, formula);
+        }
+
+        // Print the array
+        Console.WriteLine("Array elements:");
+        foreach (int num in numbers)
+        {
+            Console.Write(num + " ");
+        }
+        Console.WriteLine();
+
+        // Find and print the largest element in the array
+        int max = numbers[0];
+        for (int i = 1; i < numbers.Length; i++)
+        {
+            if (numbers[i] > max)
+            {
+                max = numbers[i];
+            }
+        }
+        Console.WriteLine("Largest element in the array: " + max);
+    }
+
+    // Function to calculate the value based on the user-defined formula
+    static int CalculateValue(int n, string formula)
+    {
+        // Parse the formula and calculate the value
+        int result = 0;
+        if (formula.Contains("^"))
+        {
+            string[] parts = formula.Split('^');
+            int exponent = Convert.ToInt32(parts[1]);
+            result = (int)Math.Pow(n, exponent);
+        }
+        else
+        {
+            // Handle other formulas if needed
+            // Add more conditions as required for different formulas
+        }
+        return result;
+    }
+}
+
+//Implement a simple for loop that iterates from 1 to 10 and prints each number along with its square root.
+using System;
+
+class Program
+{
+    static void Main()
+    {
+        // Iterate from 1 to 10
+        for (int i = 1; i <= 10; i++)
+        {
+            // Calculate the square root of the current number
+            double squareRoot = Math.Sqrt(i);
+
+            // Print the number and its square root
+            Console.WriteLine($"Number: {i}, Square Root: {squareRoot}");
+        }
+    }
+}
+
+//Part 2: HTML, CSS, and JavaScript (30 points)
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Website</title>
+  <style>
+    body {
+      background-color: lightblue;
+    }
+    h1, h2, h3 {
+      padding: 20px;
+    }
+    p {
+      font-size: 14px;
+    }
+    li {
+      list-style-type: disc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to...</h1>
+  <p>This is a paragraph...</p>
+  <ul>
+    <li>Item 1</li>
+    <li>Item 2</li>
+  </ul>
+  <img src="image.jpg" alt="Image Description">
+  <ol>
+    <li>Item A</li>
+    <li>Item B</li>
+    <li>Item C</li>
+  </ol>
+  <p>This is a <a href="https://example.com">link</a> to an external website.</p>
+  <h3 style="color: red;">Heading 3</h3>
+</body>
+</html>
+
+//Write a JavaScript function that takes a number as input and returns a string indicating whether the number is even or odd. Then, add a button to your HTML page that, when clicked, calls this function and displays the result (even or odd) in a paragraph element below the button.
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Even or Odd Checker</title>
+  <script>
+    function checkEvenOrOdd(number) {
+      if (number % 2 === 0) {
+        return "even";
+      } else {
+        return "odd";
+      }
+    }
+
+    function displayResult() {
+      var inputNumber = parseInt(document.getElementById("numberInput").value);
+      var result = checkEvenOrOdd(inputNumber);
+      document.getElementById("resultParagraph").innerText = "The number is " + result + ".";
+    }
+  </script>
+</head>
+<body>
+  <h1>Even or Odd Checker</h1>
+  <label for="numberInput">Enter a number:</label>
+  <input type="number" id="numberInput">
+  <button onclick="displayResult()">Check</button>
+  <p id="resultParagraph"></p>
+</body>
+</html>
+
+//Discuss the importance of object-oriented programming (OOP) concepts in software development. Explain the key principles of OOP (encapsulation, inheritance, polymorphism, abstraction) and provide examples of how they can be used to create more efficient, maintainable, and reusable code. Include real-world scenarios or cases where OOP is particularly valuable.
+
+The capacity of object-oriented programming (OOP) to effectively organize code, improve maintainability, and encourage reuse makes it essential in software development.
+Encapsulation promotes modularity by guaranteeing restricted access and concealing implementation details by grouping data and methods into classes.
+Code reuse and hierarchy development are made easier via inheritance, which makes it possible to extend software systems with common properties and behaviors.
+Implementing methods with flexibility is made possible by polymorphism, which treats objects consistently while supporting different behaviors.
+By omitting superfluous elements, abstraction improves understandability and modularity and reduces complexity.
+OOP's concepts simplify development by structuring code, encouraging reuse, and successfully managing complexity in real-world settings including large-scale projects, GUI development, and game development.
+This ultimately results in more effective and maintainable software systems.
