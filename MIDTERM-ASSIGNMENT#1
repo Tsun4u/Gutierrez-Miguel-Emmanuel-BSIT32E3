@@ -1,0 +1,86 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using BCrypt.Net;
+
+namespace OnionArchitectureDemo
+{
+    // Domain Layer
+    public class User
+    {
+        public string Username { get; set; }
+        public string PasswordHash { get; set; }
+        // Add other properties like email address if needed
+    }
+
+    // Application Service Layer
+    public class AuthenticationService
+    {
+        private readonly Dictionary<string, User> _users = new Dictionary<string, User>();
+
+        public bool Register(string username, string password, string email = null)
+        {
+            if (_users.ContainsKey(username))
+            {
+                Console.WriteLine("Username already exists.");
+                return false;
+            }
+
+            // Validate username and password
+            if (username.Length < 6 || password.Length < 8 || !password.Any(char.IsUpper) || !password.Any(char.IsLower) || !password.Any(char.IsDigit) || !password.Any(char.IsSymbol))
+            {
+                Console.WriteLine("Invalid username or password.");
+                return false;
+            }
+
+            // Hash the password
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(password, BCrypt.Net.BCrypt.GenerateSalt(12));
+
+            _users[username] = new User { Username = username, PasswordHash = passwordHash };
+            Console.WriteLine("Registration successful.");
+            return true;
+        }
+
+        public bool Login(string username, string password)
+        {
+            if (!_users.ContainsKey(username))
+            {
+                Console.WriteLine("Invalid username.");
+                return false;
+            }
+
+            // Validate password
+            string storedHash = _users[username].PasswordHash;
+            if (!BCrypt.Net.BCrypt.Verify(password, storedHash))
+            {
+                Console.WriteLine("Invalid password.");
+                return false;
+            }
+
+            Console.WriteLine("Login successful.");
+            return true;
+        }
+    }
+
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            AuthenticationService authService = new AuthenticationService();
+
+            // Register a new user
+            authService.Register("user123", "Password@123");
+
+            // Login with registered user
+            authService.Login("user123", "Password@123");
+
+            // Attempt to login with wrong password
+            authService.Login("user123", "WrongPassword");
+
+            // Attempt to register with existing username
+            authService.Register("user123", "NewPassword");
+
+            Console.ReadLine();
+        }
+    }
+}
